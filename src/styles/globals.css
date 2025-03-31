@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Component Styles */
+@layer components {
+  .card {
+    @apply bg-white rounded-lg shadow-md p-6;
+  }
+  
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-md font-medium transition-colors duration-200;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary-hover;
+  }
+  
+  .btn-outline {
+    @apply border border-gray-200 bg-white text-gray-700 hover:bg-gray-50;
+  }
+  
+  .input {
+    @apply w-full px-4 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+  }
+}
+
+/* Custom Utilities */
+@layer utilities {
+  .btn-hover-effect {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-hover-effect:after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease-out;
+  }
+  
+  .btn-hover-effect:hover:after {
+    transform: translateX(0);
+  }
+  
+  .eid-gradient {
+    background: linear-gradient(135deg, #EBF8EF 0%, #D1F2E1 100%);
+  }
+}
+
+/* Other styles not in layers */
+.eid-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+} 
