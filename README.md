@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MyEid - AI-Generated Eid Greeting Cards
+
+An application that allows users to create personalized Eid greeting cards using AI technology.
 
 ## Getting Started
 
@@ -68,26 +70,22 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 ## Features
 
-- Upload your photo and create AI-generated Eid greeting cards with high-quality results
-- Stability AI-powered image generation with elaborate decorative elements
-- **Guaranteed large, bold "EID MUBARAK!" text** with gold/metallic embellishments
-- Rich Islamic-inspired design elements including crescents, stars, and arabesques
-- Custom personalized Eid messages in elegant typography
-- Easy sharing options for social media
-- Responsive design for mobile and desktop
+- **Automatic Eid greeting card generation** with **guaranteed "EID MUBARAK!" text**
+- **Perfect identity preservation** when uploading photos - your face and features remain unchanged
+- **Elaborate decorative elements** including gold crescents, stars, and Islamic-inspired patterns
+- **Personalized Eid messages** generated with AI that perfectly complement your greeting card
+- **Optimized layout with text placement** that ensures visibility while preserving your photo
+- **Easy sharing** via social media, email, or download
+- **Advanced AI technology** using Stability AI's image-to-image generation with specialized text placement
 
 ## Implementation Details
 
-- Next.js 13 App Router
-- Server-side API routes for secure API integration
-- Advanced Stability AI image transformation with:
-  - Perfect identity preservation technology
-  - Enhanced text rendering with optimized parameters for clear, legible text
-  - Enhanced decorative elements with vibrant festive colors
-  - Elegant Islamic patterns and ornate gold/silver elements
-  - Optimized parameters for balancing identity preservation with creative elements
-- Responsive UI with Tailwind CSS
-- Modern, beautiful design for Eid celebrations
+- **Stability AI-powered image generation** with optimized parameters for text rendering
+- **Strategic image composition** that creates dedicated space for text while preserving identity
+- **Enhanced prompt engineering** that guarantees "EID MUBARAK!" text appears prominently
+- **Specialized aspect ratio (1152x896)** proven to provide better text rendering results
+- **Personalized Eid greetings** generated using OpenAI's advanced language models
+- **Optimized parameters** for balancing identity preservation with decorative elements
 
 ## Learn More
 

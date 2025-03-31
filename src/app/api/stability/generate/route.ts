@@ -31,28 +31,22 @@ export async function POST(req: Request) {
       );
     }
     
-    // Combine the prompt with Eid-specific instructions
-    const enhancedPrompt = `Professional Eid greeting card with clear visible "EID MUBARAK!" text.
+    // Combine the prompt with Eid-specific instructions - simplified and focused on text
+    const enhancedPrompt = `Professional Eid greeting card with the text "EID MUBARAK!" prominently displayed.
 
-The image MUST have:
-- Very large, bold, golden "EID MUBARAK!" text at the top of the image
-- Text that is clearly visible and readable
-- The exact same person from the photo with unchanged identity and features
-- Decorative Islamic elements including crescent moons, stars, and ornate patterns
+MOST IMPORTANT REQUIREMENT:
+- The words "EID MUBARAK!" must be rendered in LARGE, BOLD, GOLD LETTERS at the top of the image.
+- The text must be the most noticeable element.
+- Keep the exact same person with unchanged identity and facial features
+- Add decorative Islamic elements (crescent moons, stars, patterns)
+- Professional typography like commercial greeting cards
+- Text should have high contrast against background
 
-The "EID MUBARAK!" text should be:
-- Centered at the top
-- Large and impossible to miss
-- Gold or metallic in appearance
-- Surrounded by a subtle glow or sparkle effect
-- Professional typography similar to commercial greeting cards
+${message ? `Secondary requirement: Include this message in elegant smaller text: "${message}"` : ''}
 
-${message ? `Also include this message in smaller text below: "${message}"` : ''}
+This MUST look like a professional Eid greeting card with PROMINENT "EID MUBARAK!" TEXT.`;
 
-This is a professional photo greeting card with text overlay, like Hallmark or American Greetings cards.`;
-
-console.log('Complete prompt restructure focusing on guaranteed text rendering');
-console.log('Using greeting card styling reference to ensure text appears');
+console.log('Simplified prompt with extreme focus on text rendering');
     
     // Extract the base64 data
     let base64Data = image;
@@ -69,25 +63,29 @@ console.log('Using greeting card styling reference to ensure text appears');
         throw new Error(`Image is too large (${Math.round(imageBuffer.length / 1024 / 1024)}MB). Must be under 10MB.`);
       }
       
-      // Use sharp to resize the image to 1024x1024 as required by Stability AI
-      // We'll only resize without any other processing
+      // Use the supported dimensions that gives us more vertical space: 1152x896
+      const targetWidth = 1152;
+      const targetHeight = 896;
+      
+      console.log(`Using supported dimensions: ${targetWidth}x${targetHeight}`);
+      
+      // First resize the image to fit within the bottom portion of our target dimensions
+      // This creates space at the top for text while maintaining aspect ratio
       const resizedBuffer = await sharp(imageBuffer)
-        .resize(1024, 1024, {
-          fit: 'contain', // Maintain aspect ratio and fit within dimensions
-          background: { r: 255, g: 255, b: 255, alpha: 1 } // White background for transparent areas
+        .resize({
+          width: targetWidth,
+          height: Math.floor(targetHeight * 0.65), // Reduce to 65% to create more space for text
+          fit: 'inside',
+          background: { r: 255, g: 255, b: 255, alpha: 1 }
         })
         .toBuffer();
       
-      console.log('Sending image to Stability AI with prompt:', enhancedPrompt.substring(0, 100) + '...');
-      console.log('Using image_strength:', 0.55, '(lower values allow more modifications to the image)');
-      console.log('Using cfg_scale:', 20, '(higher values force the model to follow instructions more precisely)');
-      
-      // For better processing with text, create a version of the image with more space at the top
-      // This gives the model room to add the text
+      // Now place this resized image onto a white canvas of the target dimensions
+      // This gives us space at the top for the text
       const paddedBuffer = await sharp({
         create: {
-          width: 1024,
-          height: 1180, // Extra space at top for text
+          width: targetWidth,
+          height: targetHeight,
           channels: 4,
           background: { r: 255, g: 255, b: 255, alpha: 1 }
         }
@@ -99,11 +97,14 @@ console.log('Using greeting card styling reference to ensure text appears');
       .png()
       .toBuffer();
       
+      console.log('Created image with expanded space at top specifically for text (35% of height)');
+      
       // Save the buffer to a temporary file
       tempFilePath = path.join(os.tmpdir(), `image-${Date.now()}.png`);
       fs.writeFileSync(tempFilePath, paddedBuffer);
       
-      console.log('Added extra padding at the top of the image to create space for text');
+      console.log('Using even lower image_strength: 0.45 to allow more text freedom');
+      console.log('Using maximum cfg_scale: 25 to enforce text requirements');
       
       // Create form data for Stability API
       const formData = new FormData();
@@ -112,22 +113,21 @@ console.log('Using greeting card styling reference to ensure text appears');
       const fileContent = readFileSync(tempFilePath);
       const blob = new Blob([fileContent], { type: 'image/png' });
       
-      // Append form fields
+      // Append form fields with extreme focus on text
       formData.append('init_image', blob, 'image.png');
       formData.append('text_prompts[0][text]', enhancedPrompt);
-      formData.append('text_prompts[0][weight]', '1.2'); // Increase weight for the positive prompt
-      // Add a negative prompt to avoid unwanted elements but specifically emphasize text MUST appear
-      formData.append('text_prompts[1][text]', 'different person, altered face, changed ethnicity, different skin tone, deformed face, bad anatomy, disfigured, ugly, blurry, low quality, watermark, signature, missing text, small text, no text, illegible text, no decorations, plain background, minimal decoration');
-      formData.append('text_prompts[1][weight]', '-0.9');
+      formData.append('text_prompts[0][weight]', '1.5'); // Significantly increase weight to force text
+      // Add a negative prompt with strong focus on avoiding missing text
+      formData.append('text_prompts[1][text]', 'no text, missing text, blurry text, illegible text, small text, different person, altered face, changed ethnicity, different skin tone, deformed face');
+      formData.append('text_prompts[1][weight]', '-1.0'); // Maximum negative weight
       formData.append('init_image_mode', 'IMAGE_STRENGTH');
-      formData.append('image_strength', '0.55'); // Lower to allow more transformation for text
-      formData.append('cfg_scale', '20'); // Even higher to force text to appear
+      formData.append('image_strength', '0.45'); // Even lower to ensure text freedom
+      formData.append('cfg_scale', '25'); // Maximum to force text to appear
       formData.append('samples', '1');
       formData.append('steps', '50'); // Maximum allowed steps
       formData.append('style_preset', 'photographic'); // Add style preset for better quality
       
-      console.log('Using maximum allowed steps (50) with increased cfg_scale (20) and reduced image_strength (0.55)');
-      console.log('Added style_preset: photographic, increased positive prompt weight to 1.2');
+      console.log('Using maximized parameters: positive prompt weight 1.5, negative prompt weight -1.0');
       
       // Call Stability API
       const response = await fetch(STABILITY_API_ENDPOINT, {
