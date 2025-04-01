@@ -36,7 +36,6 @@ export async function POST(req: Request) {
 
 MOST IMPORTANT REQUIREMENT:
 - The words "EID MUBARAK!" must be rendered in LARGE, BOLD, GOLD LETTERS at the top of the image.
-- The text must be the most noticeable element.
 - Keep the exact same person with unchanged identity and facial features
 - Add decorative Islamic elements (crescent moons, stars, patterns)
 - Professional typography like commercial greeting cards

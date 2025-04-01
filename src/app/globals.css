@@ -1,0 +1,245 @@
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Custom Utilities - These will be applied after Tailwind's utilities */
+@layer utilities {
+  .eid-gradient {
+    background: linear-gradient(135deg, #EBF8EF 0%, #D1F2E1 100%);
+  }
+  
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Container */
+.eid-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Custom Component Styles - Applied after Tailwind's components */
+@layer components {
+  .card {
+    @apply bg-white rounded-lg shadow-md;
+  }
+  
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-md font-medium transition-colors duration-200;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary-hover;
+  }
+  
+  .btn-outline {
+    @apply border border-gray-200 bg-white text-gray-700 hover:bg-gray-50;
+  }
+  
+  .btn-hover-effect { 
+    @apply relative overflow-hidden;
+  }
+  
+  .btn-hover-effect:after {
+    content: '';
+    @apply absolute inset-0 bg-white bg-opacity-20 transform -translate-x-full transition-transform duration-500;
+  }
+  
+  .btn-hover-effect:hover:after {
+    @apply translate-x-0;
+  }
+  
+  .input {
+    @apply w-full px-4 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+  }
+}
+
+@layer base {
+  :root {
+    --foreground: #2D3748;
+    --background: #F7FAFC;
+    --primary: #0C8346;
+    --primary-hover: #0A6A3A;
+    --secondary: #4299E1;
+    --secondary-hover: #3182CE;
+    --accent: #8B5CF6;
+    --accent-hover: #7C3AED;
+    --success: #38A169;
+    --error: #E53E3E;
+    --warning: #ECC94B;
+    --muted: #718096;
+    --border: #E2E8F0;
+    --card-bg: #FFFFFF;
+    
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    
+    --radius-sm: 0.25rem;  
+    --radius-md: 0.5rem;
+    --radius-lg: 1rem;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground: #F7FAFC;
+    --background: #1A202C;
+    --card-bg: #2D3748;
+    --border: #4A5568;
+    --muted: #A0AEC0;
+  }
+}
+
+/* Base Styles */
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+.animate-pulse-slow {
+  animation: pulse 2s infinite;
+}
+
+/* Modern Button Hover Effect */
+.btn-hover-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-hover-effect:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease-out;
+  z-index: 0;
+}
+
+.btn-hover-effect:hover:after {
+  transform: translateX(0);
+}
+
+/* Card */
+.card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+  background-color: var(--secondary);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: var(--secondary-hover);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--border);
+  color: var(--foreground);
+}
+
+.btn-outline:hover {
+  background-color: #F7FAFC;
+  border-color: var(--muted);
+}
+
+/* Form Elements */
+.input {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-color: white;
+  transition: all 0.2s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(12, 131, 70, 0.15);
+}
+
+/* Images */
+.image-transition {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.image-transition:hover {
+  transform: scale(1.02);
+  box-shadow: var(--shadow-lg);
+}
