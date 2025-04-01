@@ -101,3 +101,41 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Deployment Instructions
+
+### Deploying to Linux Servers
+
+When deploying to Linux servers, you may encounter issues with the Sharp image processing library. The application has been configured to automatically handle this during the build process, but if you encounter the error:
+
+```
+Error: Could not load the "sharp" module using the linux-x64 runtime
+```
+
+You can resolve it using one of these methods:
+
+1. **Use the built-in fix**: The package.json includes a `postinstall` script that should automatically install Sharp with its optional dependencies.
+
+2. **Manual installation**: If the automatic fix doesn't work, run this command on your server:
+   ```bash
+   npm install --include=optional sharp
+   ```
+
+3. **For Vercel deployments**: Add the following environment variable in your Vercel project settings:
+   ```
+   NPM_FLAGS=--include=optional
+   ```
+
+4. **For Docker deployments**: Make sure your Dockerfile includes the necessary build tools:
+   ```dockerfile
+   # Install dependencies for Sharp
+   RUN apt-get update && apt-get install -y \
+       build-essential \
+       python3
+   ```
+
+### Other Deployment Considerations
+
+- Ensure your server has at least 1GB of RAM for image processing
+- The application requires outbound internet access to connect to the OpenAI and Stability AI APIs
+- Configure appropriate timeouts for your server as image generation can take several seconds
