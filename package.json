@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm install --include=optional sharp && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "npm install --include=optional sharp"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.0.2",
